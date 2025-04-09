@@ -55,7 +55,7 @@ server <- function(id, state) {
       }
       p <- ggplot(dataset, aes(x = event_month, y = observation_count, fill = country)) +
         geom_area(position = "stack") +
-        facet_wrap(~vernacularName, scales = "free_y") +
+        facet_wrap(~scientificName, scales = "free") +
         labs(
           title = "",
           x = "Month",

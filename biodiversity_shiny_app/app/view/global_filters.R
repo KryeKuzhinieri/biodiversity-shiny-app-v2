@@ -73,9 +73,12 @@ server <- function(id) {
     updatePickerInput(
       inputId = "species_names",
       choices = filter_choices,
+      # selected = NULL
       selected = c(
-        "Wild Onion",
-        "Blackstart"
+        "Wild Onion",  # plantae
+        "Blackstart",  # animal
+        "Exidia truncata",  # fungi
+        "Borago officinalis"
       )
     )
 

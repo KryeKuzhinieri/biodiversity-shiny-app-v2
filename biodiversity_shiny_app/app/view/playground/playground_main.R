@@ -319,7 +319,7 @@ server <- function(id, state) {
         })
     })
 
-    table$server(id = "table", data = db_data())
+    table$server(id = "table", data = db_data)
     output$download_graph <- downloadHandler(
       filename = function() {
         "plot.png"

@@ -45,7 +45,7 @@ server <- function(id, state, data = NULL) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     output$table <- renderDT(
-      if (is.null(data)) state$data else data,
+      if (is.null(data)) state$data else data(),
       fillContainer = TRUE,
     )
 
@@ -54,7 +54,7 @@ server <- function(id, state, data = NULL) {
         "data.csv"
       },
       content = function(file) {
-        write.csv2(if (is.null(data)) state$data else data, file, row.names = FALSE)
+        write.csv2(if (is.null(data)) state$data else data(), file, row.names = FALSE)
       }
     )
   })
