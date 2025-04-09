@@ -101,8 +101,14 @@ server <- function(id, state) {
           label = state$data$scientificName,
           icon = awesomeIcons(
             library = "fa",
-            icon = ifelse(state$data$kingdom == "Animalia", "paw", ifelse(state$data$kingdom == "Fungi", "globe", "pagelines")),
-            markerColor = ifelse(state$data$kingdom == "Animalia", "lightred", ifelse(state$data$kingdom == "Fungi", "lightblue", "lightgreen"))
+            icon = ifelse(
+              state$data$kingdom == "Animalia", "paw",
+              ifelse(state$data$kingdom == "Fungi", "globe", "pagelines")
+            ),
+            markerColor = ifelse(
+              state$data$kingdom == "Animalia", "lightred",
+              ifelse(state$data$kingdom == "Fungi", "lightblue", "lightgreen")
+            )
           ),
           layerId = seq_len(nrow(state$data))
         )
