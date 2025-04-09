@@ -7,6 +7,7 @@ box::use(
 )
 
 box::use(
+  app / logic / constants[main_query, unique_options_query, summary_query, ],
   app / logic / data_transformations[db_connection, ],
 )
 
@@ -60,15 +61,14 @@ server <- function(id) {
       table_name = "occurence"
     )
 
-    all_options_query <- sprintf(
-      "SELECT DISTINCT vernacularName FROM '%s'
-      UNION
-      SELECT DISTINCT scientificName FROM '%s'",
-      isolate(rv$table_name),
-      isolate(rv$table_name)
+    filter_choices <- dbGetQuery(
+      isolate(rv$conn),
+      sprintf(
+        unique_options_query,
+        isolate(rv$table_name),
+        isolate(rv$table_name)
+      )
     )
-
-    filter_choices <- dbGetQuery(isolate(rv$conn), all_options_query)
 
     updatePickerInput(
       inputId = "species_names",
@@ -83,38 +83,25 @@ server <- function(id) {
       input$species_names,
       {
         placeholders <- paste(rep("?", length(input$species_names)), collapse = ", ")
-        query <- sprintf(
-          "
-          SELECT
-            id, scientificName, vernacularName, taxonRank, kingdom,
-            continent, country, countryCode, eventDate,
-            latitudeDecimal, longitudeDecimal
-          FROM '%s'
-          WHERE vernacularName IN (%s) OR scientificName IN (%s)",
-          isolate(rv$table_name),
-          placeholders,
-          placeholders
+        rv$data <- dbGetQuery(
+          rv$conn,
+          sprintf(
+            main_query,
+            isolate(rv$table_name),
+            placeholders,
+            placeholders
+          ),
+          params = c(input$species_names, input$species_names)
         )
-        rv$data <- dbGetQuery(rv$conn, query, params = c(input$species_names, input$species_names))
 
-        summary_query <- sprintf(
-          "SELECT
-            country,
-            scientificName,
-            vernacularName,
-            DATE_TRUNC('month', CAST(eventDate AS DATE)) AS event_month,
-            COUNT(*) AS observation_count
-          FROM '%s'
-          WHERE vernacularName IN (%s) OR scientificName IN (%s)
-          GROUP BY country, event_month, scientificName, vernacularName
-          ORDER BY event_month;",
-          isolate(rv$table_name),
-          placeholders,
-          placeholders
-        )
         rv$summary_data <- dbGetQuery(
           rv$conn,
-          summary_query,
+          sprintf(
+            summary_query,
+            isolate(rv$table_name),
+            placeholders,
+            placeholders
+          ),
           params = c(input$species_names, input$species_names)
         )
       },
