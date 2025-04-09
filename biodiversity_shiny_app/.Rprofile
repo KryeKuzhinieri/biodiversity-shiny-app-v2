@@ -1,9 +1,6 @@
 if (file.exists(".env")) {
   library(dotenv)
   load_dot_env(".env")
-  message("Loaded environment variables in server.R")
-} else {
-  message("No .env file found in server.R")
 }
 
 

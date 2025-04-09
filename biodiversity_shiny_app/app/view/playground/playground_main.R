@@ -15,7 +15,7 @@ box::use(
   ellmer[chat_openai, tool, type_string],
   ggplot2[...], # ... means import all functions - needed to allow the ai model to create any
   jsonlite[toJSON],
-  promises[`%...>%`],
+  promises[`%...>%`, catch, then, ],
   shiny[
     actionButton,
     downloadButton,
@@ -33,7 +33,8 @@ box::use(
     tagAppendAttributes,
     tags,
     textOutput,
-    verbatimTextOutput
+    verbatimTextOutput,
+    showNotification
   ],
   shinychat[chat_append, chat_append_message, chat_ui],
   logger[log_info],
@@ -300,10 +301,22 @@ server <- function(id, state) {
     # Handle user input
     observeEvent(input$chat_user_input, {
       # Add user message to the chat history
-      chat_append(ns("chat"), chat$chat_async(input$chat_user_input)) %...>% {
-        # print(chat())  # nolint
-        log_info("Adding user message to chat history.")
-      }
+      chat$chat_async(input$chat_user_input) |>
+        then(function(result) {
+          chat_append(ns("chat"), result) %...>% {
+            log_info("Adding user message to chat history.")
+          }
+        }) |>
+        catch(function(error) {
+          chat_append(ns("chat"), "Fix the OPEN_AI_KEY in .env file!") %...>% {
+            log_info("Error during chat_async:", error$message)
+            showNotification(
+              "OPEN AI API KEY ERROR. Please fix your API key before proceeding!",
+              type = "error",
+              duration = NULL
+            )
+          }
+        })
     })
 
     table$server(id = "table", data = db_data())
