@@ -54,7 +54,7 @@ server <- function(id, state) {
         setView(
           lat = 52.237049,
           lng = 21.017532,
-          zoom = 4
+          zoom = 3
         )
     })
 

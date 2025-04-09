@@ -36,13 +36,13 @@ ui <- function(id) {
         choices = NULL,
         multiple = TRUE,
         options = list(
-          `actions-box` = TRUE,
           `live-search` = TRUE,
           `live-search-placeholder` = "Search",
           `none-selected-text` = "Select Fields",
           `tick-icon` = "",
           `virtual-scroll` = 10,
-          `size` = 6
+          `size` = 6,
+          `max-options` = 100
         )
       )
     )
@@ -73,16 +73,19 @@ server <- function(id) {
     updatePickerInput(
       inputId = "species_names",
       choices = filter_choices,
-      selected = c("Orthilia secunda", "Lentinus tigrinus", "Corvus frugilegus"),
+      selected = c(
+        "Wild Onion",
+        "Blackstart"
+      )
     )
 
     observeEvent(
       input$species_names,
       {
-        species <- paste0("'", input$species_names, "'", collapse = ", ")
+        placeholders <- paste(rep("?", length(input$species_names)), collapse = ", ")
         query <- sprintf("SELECT * FROM '%s' WHERE vernacularName IN (%s)
-        OR scientificName IN (%s)", table_name, species, species)
-        rv$data <- dbGetQuery(conn, query)
+        OR scientificName IN (%s)", table_name, placeholders, placeholders)
+        rv$data <- dbGetQuery(conn, query, params = c(input$species_names, input$species_names))
       },
       ignoreInit = TRUE,
       ignoreNULL = TRUE
