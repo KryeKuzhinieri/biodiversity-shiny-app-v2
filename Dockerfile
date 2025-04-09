@@ -1,4 +1,4 @@
-# Base image https://hub.docker.com/u/rocker/
+# Base image https://hub.docker.com/u/rocker/shiny:4.4
 FROM rocker/shiny:4.4
 
 # Install system requirements for R as needed
@@ -26,7 +26,6 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-
 RUN R -e "install.packages('dotenv')"
 
 # Custom shiny-server.conf file. Configuration details here:
@@ -34,8 +33,11 @@ RUN R -e "install.packages('dotenv')"
 COPY shiny-server.conf /etc/shiny-server
 
 # create container folder for caching packages
-# RUN mkdir -p renv/cache
-# ENV RENV_PATHS_CACHE=/renv/cache
+RUN mkdir -p /renv/cache
+ENV RENV_PATHS_CACHE=/renv/cache
+
+# Give permissions to shiny user for the entire /renv directory BEFORE setting WORKDIR
+RUN chown -R shiny:shiny /renv
 
 WORKDIR /srv/shiny-server
 
@@ -45,5 +47,7 @@ RUN rm -r *
 COPY /biodiversity_shiny_app .
 COPY .env .
 
-# Give permissions to shiny user for shiny-server
+# Give permissions to shiny user for the shiny app directory as well
 RUN chown -R shiny:shiny /srv/shiny-server/
+
+USER shiny
