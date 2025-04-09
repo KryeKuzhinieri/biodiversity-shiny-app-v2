@@ -11,6 +11,7 @@ library(vroom)
 library(leaflet)
 library(shinycssloaders)
 library(shinyWidgets)
+library(DT)
 
 
 library(treesitter)
