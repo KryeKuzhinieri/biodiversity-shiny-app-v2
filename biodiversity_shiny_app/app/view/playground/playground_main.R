@@ -1,7 +1,7 @@
 box::use(
   shiny[
     NS, moduleServer, verbatimTextOutput, tagAppendAttributes, actionButton,
-    plotOutput, onStop, reactiveVal, textOutput, reactive, renderText,
+    plotOutput, reactiveVal, textOutput, reactive, renderText,
     renderPlot, observeEvent, tags, isolate, observe, downloadButton,
     downloadHandler,
   ],
@@ -11,8 +11,7 @@ box::use(
     as_fill_carrier, popover, tooltip, toggle_popover,
   ],
   bsicons[bs_icon, ],
-  DBI[dbConnect, dbDisconnect, dbGetQuery, ],
-  duckdb[duckdb, ],
+  DBI[dbGetQuery, ],
   DT[DTOutput, renderDT, ],
   # ... means import all functions - needed to allow the ai model to create any
   # type of graph using ggplot2.
@@ -21,14 +20,12 @@ box::use(
   ellmer[chat_openai, tool, type_string, ],
   promises[`%...>%`, ],
   shinycssloaders[withSpinner, ],
-  shinyWidgets[pickerInput, ],
   utils[write.csv2, ],
 )
 
 box::use(
   app / view / playground / prompt_helper[system_prompt, df_to_html, ],
   app / view / playground / explain_plot[explain_plot, ],
-  app / logic / data_transformation[DB_CHOICES, DB_PATH, ],
   app / logic / utils[show_no_data_plot, ],
 )
 
@@ -36,7 +33,6 @@ greeting <- paste(readLines("app/view/playground/greeting.md"), collapse = "\n")
 
 openai_model <- "gpt-4o-mini" # gpt-4o
 
-default_query <- sprintf("SELECT * FROM %s;", "animal_ez")
 
 
 #' @export
@@ -48,15 +44,7 @@ ui <- function(id) {
       fill = TRUE,
       sidebar = sidebar(
         width = 450,
-        pickerInput(
-          inputId = ns("selected_db"),
-          label = "Select the database to use",
-          choices = DB_CHOICES,
-          selected = "animal_ez.duckdb",
-          multiple = FALSE,
-          options = list("size" = 4)
-        ),
-        chat_ui(ns("chat"), fill = FALSE, height = "650px")
+        chat_ui(ns("chat"), fill = FALSE, height = "800px")
       ),
       # Headers
       tagAppendAttributes(
@@ -141,38 +129,25 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id) {
+server <- function(id, state) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
+    default_query <- sprintf("SELECT * FROM '%s';", isolate(state$table_name))
     current_title <- reactiveVal("All data")
     current_query <- reactiveVal(default_query)
     current_plot <- reactiveVal(show_no_data_plot(label = "Ask AI for a plot!"))
-    # connect to the database.
-    conn <- reactiveVal(
-      dbConnect(
-        duckdb(),
-        dbdir = file.path(DB_PATH, "animal_ez.duckdb"),
-        read_only = TRUE
-      )
+    system_prompt_str <- system_prompt(
+      dbGetQuery(isolate(state$conn), default_query),
+      isolate(state$table_name)
     )
-    system_prompt_str <- reactiveVal(
-      system_prompt(dbGetQuery(isolate(conn()), default_query), "animal_ez")
-    )
-
-    onStop(function() {
-      cat("Doing application cleanup!")
-      dbDisconnect(isolate(conn()))
-    })
 
     # This object must always be passed as the `.ctx` argument to query(), so that
     # tool functions can access the context they need to do their jobs; in this
     # case, the database connection that query() needs.
-    ctx <- reactiveVal(list(conn = isolate(conn())))
+    ctx <- reactiveVal(list(conn = isolate(state$conn)))
 
-    chat <- reactiveVal(
-      chat_openai(model = openai_model, system_prompt = isolate(system_prompt_str()))
-    )
+    chat <- chat_openai(model = openai_model, system_prompt = system_prompt_str)
 
     # The reactive data frame. Either returns the entire dataset, or filtered by
     # whatever Sidebot decided.
@@ -181,7 +156,7 @@ server <- function(id) {
       if (is.null(sql) || sql == "") {
         sql <- default_query
       }
-      dbGetQuery(conn(), sql)
+      dbGetQuery(state$conn, sql)
     })
 
     output$show_title <- renderText({
@@ -200,32 +175,6 @@ server <- function(id) {
       toggle_popover(id = "plot-popover")
       explain_plot(chat, current_plot, model = openai_model, .ctx = ctx)
     })
-
-    observeEvent(input$selected_db,
-      {
-        default_query <- sprintf(
-          "SELECT * FROM %s;",
-          strsplit(input$selected_db, ".", fixed = TRUE)[[1]][1]
-        )
-        print(default_query)
-        dbDisconnect(conn())
-        conn(
-          dbConnect(
-            duckdb(),
-            dbdir = file.path(DB_PATH, input$selected_db),
-            read_only = TRUE
-          )
-        )
-        system_prompt_str(
-          system_prompt(dbGetQuery(conn(), default_query), input$selected_db)
-        )
-        ctx(list(conn = conn()))
-        current_query(default_query)
-        current_title(sprintf("All %s data", input$selected_db))
-        chat(chat_openai(model = openai_model, system_prompt = system_prompt_str()))
-      },
-      ignoreInit = TRUE
-    )
 
     append_output <- function(...) {
       txt <- paste0(...)
@@ -253,7 +202,7 @@ server <- function(id) {
       tryCatch(
         {
           # Try it to see if it errors; if so, the LLM will see the error
-          dbGetQuery(conn(), query)
+          dbGetQuery(isolate(state$conn), query)
         },
         error = function(err) {
           append_output("> Error: ", conditionMessage(err), "\n\n")
@@ -278,7 +227,7 @@ server <- function(id) {
 
       tryCatch(
         {
-          df <- dbGetQuery(conn(), query)
+          df <- dbGetQuery(isolate(state$conn), query)
         },
         error = function(e) {
           append_output("> Error: ", conditionMessage(e), "\n\n")
@@ -317,18 +266,18 @@ server <- function(id) {
     observe({
       # Preload the conversation with the system prompt. These are instructions for
       # the chat model, and must not be shown to the end user.
-      chat()$register_tool(tool(
+      chat$register_tool(tool(
         update_dashboard,
         "Modifies the data presented in the data dashboard, based on the given SQL query, and also updates the title.",
         query = type_string("A DuckDB SQL query; must be a SELECT statement."),
         title = type_string("A title to display at the top of the data dashboard, summarizing the intent of the SQL query.")
       ))
-      chat()$register_tool(tool(
+      chat$register_tool(tool(
         query,
         "Perform a SQL query on the data, and return the results as JSON.",
         query = type_string("A DuckDB SQL query; must be a SELECT statement.")
       ))
-      chat()$register_tool(
+      chat$register_tool(
         tool(
           plot_data,
           "Modifies the plot present in the dashboard, based on the given plot code.",
@@ -346,7 +295,7 @@ server <- function(id) {
     # Handle user input
     observeEvent(input$chat_user_input, {
       # Add user message to the chat history
-      chat_append(ns("chat"), chat()$chat_async(input$chat_user_input)) %...>% {
+      chat_append(ns("chat"), chat$chat_async(input$chat_user_input)) %...>% {
         # print(chat())
       }
     })

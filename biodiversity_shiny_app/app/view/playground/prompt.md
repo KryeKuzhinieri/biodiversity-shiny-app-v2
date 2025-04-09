@@ -81,7 +81,7 @@ You should provide string with single quotes '' and all the labels such include 
 
 Example of question answering:
 > [User]  
-> Generate a bar plot of data where x is animal.age and facets are animal.species?  
+> Generate a bar plot of data where x is country and facets are animal.species?  
 > [/User]
 > [ToolCall]
 > plot_data({code: 'ggplot(db_data(), aes(x = animal.age, fill = animal.species)) +  geom_bar() + facet_wrap(~ animal.species) + labs(x = "Animal Age", y = "Frequency") + theme_minimal()'})

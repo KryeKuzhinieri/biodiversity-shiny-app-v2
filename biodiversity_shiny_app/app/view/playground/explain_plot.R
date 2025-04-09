@@ -2,7 +2,7 @@ box::use(
   ggplot2[ggsave, ],
   shiny[
     showModal, modalDialog, tags, tagAppendAttributes, observeEvent,
-    getDefaultReactiveDomain, isolate,
+    getDefaultReactiveDomain,
   ],
   shinychat[chat_ui, chat_append, ],
   ellmer[content_image_file, ],
@@ -48,7 +48,7 @@ explain_plot <- function(chat, p, model, ..., .ctx = NULL, session = getDefaultR
   )
 
   session$onFlushed(function() {
-    stream <- isolate(chat())$chat_async(
+    stream <- chat$chat_async(
       "Interpret this plot, which is based on the current state of the data (i.e. with filtering applied, if any). Try to make specific observations if you can, but be conservative in drawing firm conclusions and express uncertainty if you can't be confident.",
       img_content
     )
@@ -56,7 +56,7 @@ explain_plot <- function(chat, p, model, ..., .ctx = NULL, session = getDefaultR
   })
 
   observeEvent(session$input[[paste0(chat_id, "_user_input")]], {
-    stream <- chat()$chat_async(session$input[[paste0(chat_id, "_user_input")]])
+    stream <- chat$chat_async(session$input[[paste0(chat_id, "_user_input")]])
     chat_append(session$ns(chat_id), stream)
   })
 }

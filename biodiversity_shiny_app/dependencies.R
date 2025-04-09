@@ -14,7 +14,11 @@ library(shinyWidgets)
 library(DT)
 library(ggplot2)
 library(plotly)
-
+library(shinychat)
+library(ellmer)
+library(promises)
+library(jsonlite)
+library(magick)
 
 library(treesitter)
 library(treesitter.r)

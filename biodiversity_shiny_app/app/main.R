@@ -11,6 +11,7 @@ box::use(
   app / view / global_filters,
   app / view / leaflet_map,
   app / view / table,
+  app / view / playground / playground_main,
 )
 
 # helps convert ggplot to dark/light mode.
@@ -42,6 +43,7 @@ ui <- function(id) {
       countries_plot$ui(id = ns("countries_plot")),
       table$ui(id = ns("table")),
     ),
+    playground_main$ui(ns("playground_main")),
     nav_spacer(),
     nav_item(input_dark_mode(id = ns("theme_switch"), mode = "dark"))
   )
@@ -54,6 +56,7 @@ server <- function(id) {
     leaflet_map$server(id = "leaflet_map", state = state)
     countries_plot$server(id = "countries_plot", state = state)
     table$server(id = "table", state = state)
+    playground_main$server("playground_main", state = state)
     observeEvent(input$theme_switch,
       {
         # show the logo to hide some design issues when

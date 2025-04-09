@@ -54,11 +54,10 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    table_name <- "app/data/occurence.duckdb"
-
     rv <- reactiveValues(
       data = NULL,
-      conn = db_connection(table_name = "occurence.duckdb")
+      conn = db_connection(table_name = "occurence.duckdb"),
+      table_name = "app/data/occurence.duckdb"
     )
 
     all_options_query <- paste(
@@ -91,7 +90,7 @@ server <- function(id) {
             latitudeDecimal, longitudeDecimal
           FROM '%s'
           WHERE vernacularName IN (%s) OR scientificName IN (%s)",
-          table_name,
+          isolate(rv$table_name),
           placeholders,
           placeholders
         )
@@ -108,7 +107,7 @@ server <- function(id) {
           WHERE vernacularName IN (%s) OR scientificName IN (%s)
           GROUP BY country, event_month, scientificName, vernacularName
           ORDER BY event_month;",
-          table_name,
+          isolate(rv$table_name),
           placeholders,
           placeholders
         )
