@@ -5,6 +5,7 @@ box::use(
   plotly[ggplotly, plotlyOutput, renderPlotly],
   shiny[moduleServer, NS, span],
   shinycssloaders[withSpinner],
+  logger[log_info],
 )
 
 box::use(
@@ -46,6 +47,7 @@ server <- function(id, state) {
     ns <- session$ns
 
     output$plot <- renderPlotly({
+      log_info("Plotting country data...")
       dataset <- state$summary_data
 
       if (is.null(dataset)) {
@@ -60,6 +62,7 @@ server <- function(id, state) {
           y = "Number of Observations"
         )
 
+      log_info("Ploted country data!")
       ggplotly(p)
     })
   })

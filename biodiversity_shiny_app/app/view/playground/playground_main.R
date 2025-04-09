@@ -36,6 +36,7 @@ box::use(
     verbatimTextOutput
   ],
   shinychat[chat_append, chat_append_message, chat_ui],
+  logger[log_info],
   shinycssloaders[withSpinner],
 )
 
@@ -185,7 +186,7 @@ server <- function(id, state) {
     #'   summarizing the intent of the SQL query.
     update_dashboard <- function(query, title) {
       if (is.null(query) || query == "") {
-        print("No query available. Using default query.")
+        log_info("No query available. Using default query.")
         sql <- default_query
       }
       append_output("\n```sql\n", query, "\n```\n\n")
@@ -301,6 +302,7 @@ server <- function(id, state) {
       # Add user message to the chat history
       chat_append(ns("chat"), chat$chat_async(input$chat_user_input)) %...>% {
         # print(chat())  # nolint
+        log_info("Adding user message to chat history.")
       }
     })
 

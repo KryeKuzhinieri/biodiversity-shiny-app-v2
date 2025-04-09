@@ -6,7 +6,6 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends \
     git-core \
     libssl-dev \
-    libcurl4-gnutls-dev \
     curl \
     libmagick++-dev \
     libsodium-dev \
@@ -18,9 +17,17 @@ RUN apt-get update && apt-get install -y \
     libproj-dev \
     libsqlite3-dev \
     cmake \
+    build-essential \
+    gfortran \
+    r-base-dev \
+    libblas-dev \
+    liblapack-dev \
+    libcurl4-openssl-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+
+RUN R -e "install.packages('dotenv')"
 
 # Custom shiny-server.conf file. Configuration details here:
 # https://docs.posit.co/shiny-server
@@ -36,7 +43,7 @@ WORKDIR /srv/shiny-server
 RUN rm -r *
 
 COPY /biodiversity_shiny_app .
+COPY .env .
 
-# Give permissions to shiny user for shiny-server and to static/graphs to all
-# users.
+# Give permissions to shiny user for shiny-server
 RUN chown -R shiny:shiny /srv/shiny-server/

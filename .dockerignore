@@ -3,3 +3,4 @@ renv/
 .Rproj.user/
 .github/
 extra_files/
+*.duckdb

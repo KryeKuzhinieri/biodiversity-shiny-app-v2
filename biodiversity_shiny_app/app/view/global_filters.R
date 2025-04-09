@@ -4,11 +4,12 @@ box::use(
   DBI[dbDisconnect, dbGetQuery],
   shiny[isolate, moduleServer, NS, observeEvent, onStop, reactiveValues, span],
   shinyWidgets[pickerInput, updatePickerInput],
+  logger[log_info],
 )
 
 box::use(
-  app/logic/constants[main_query, summary_query, unique_options_query],
-  app/logic/data_transformations[db_connection],
+  app / logic / constants[main_query, summary_query, unique_options_query],
+  app / logic / data_transformations[db_connection],
 )
 
 
@@ -81,6 +82,7 @@ server <- function(id) {
     observeEvent(
       input$species_names,
       {
+        log_info("An update in global filters")
         placeholders <- paste(rep("?", length(input$species_names)), collapse = ", ")
         rv$data <- dbGetQuery(
           rv$conn,

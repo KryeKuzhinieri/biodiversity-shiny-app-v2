@@ -19,6 +19,7 @@ library(ellmer)
 library(promises)
 library(jsonlite)
 library(magick)
+library(dotenv)
 
 library(treesitter)
 library(treesitter.r)

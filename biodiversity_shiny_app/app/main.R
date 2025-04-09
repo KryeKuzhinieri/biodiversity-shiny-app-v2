@@ -3,15 +3,16 @@ box::use(
   shiny[moduleServer, NS, observeEvent, tags],
   shinyjs[runjs, useShinyjs],
   thematic[thematic_shiny],
+  logger[log_info],
 )
 
 box::use(
-  app/logic/theming[set_theme],
-  app/view/countries_plot,
-  app/view/global_filters,
-  app/view/leaflet_map,
-  app/view/playground/playground_main,
-  app/view/table,
+  app / logic / theming[set_theme],
+  app / view / countries_plot,
+  app / view / global_filters,
+  app / view / leaflet_map,
+  app / view / playground / playground_main,
+  app / view / table,
 )
 
 # helps convert ggplot to dark/light mode.
@@ -62,6 +63,7 @@ ui <- function(id) {
 #' @export
 server <- function(id) {
   moduleServer(id, function(input, output, session) {
+    log_info("Starting server...")
     state <- global_filters$server(id = "global_filters")
     leaflet_map$server(id = "leaflet_map", state = state)
     countries_plot$server(id = "countries_plot", state = state)
@@ -71,6 +73,8 @@ server <- function(id) {
       {
         # show the logo to hide some design issues when
         # the css files get changed.
+
+        log_info("Switching theme to ", input$theme_switch)
         runjs("App.showSplash()")
         session$setCurrentTheme(set_theme(mode = input$theme_switch))
         runjs("App.removeSplash()")

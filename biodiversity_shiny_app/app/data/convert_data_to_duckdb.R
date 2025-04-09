@@ -48,9 +48,7 @@ convert_data_to_duckdb <- function(csv_file_path, filename) {
 }
 
 convert_data_to_duckdb(
-  csv_file_path = paste0(
-    "/media/kryekuzhinieri/Projects/Biodiversity Shiny App Version 2/",
-    "extra_files/biodiversity-data/occurence.csv"
-  ),
+  # this is the docker location.
+  csv_file_path = "/data/occurence.csv",
   filename = "occurence"
 )

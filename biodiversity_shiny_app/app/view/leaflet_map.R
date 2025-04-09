@@ -16,6 +16,7 @@ box::use(
     renderLeaflet,
     setView
   ],
+  logger[log_info],
   shiny[div, modalDialog, moduleServer, NS, observe, observeEvent, req, span, showModal],
   shinycssloaders[withSpinner],
 )
@@ -65,6 +66,7 @@ server <- function(id, state) {
 
     observeEvent(input$map_marker_click,
       {
+        log_info("There was a click in map.")
         filtered_data <- state$data[input$map_marker_click$id, ]
         showModal(
           modalDialog(
@@ -85,6 +87,7 @@ server <- function(id, state) {
 
     observe({
       req(state$data)
+      log_info("Updating map with new theme...")
       current_theme <- bs_get_variables(
         session$getCurrentTheme(),
         varnames = c("theme_mode")
@@ -101,6 +104,7 @@ server <- function(id, state) {
 
     observe({
       req(state$data)
+      log_info("Updating map with new choices...")
       leafletProxy(ns("map")) |>
         clearShapes() |>
         clearMarkers() |>
