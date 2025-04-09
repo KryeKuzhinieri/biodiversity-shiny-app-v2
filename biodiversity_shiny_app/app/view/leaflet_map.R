@@ -3,12 +3,12 @@ box::use(
   DBI[dbDisconnect, dbGetQuery, ],
   bslib[as_fill_carrier, card, card_header, tooltip, bs_get_variables, ],
   leaflet[
-    leaflet, leafletOutput, renderLeaflet, addTiles, addAwesomeMarkers,
+    leaflet, leafletOutput, renderLeaflet, addAwesomeMarkers,
     awesomeIcons,
     setView, leafletProxy, clearShapes, clearMarkers, clearMarkerClusters,
-    addProviderTiles, providers,
+    addProviderTiles, providers, leafletOptions
   ],
-  shiny[showModal, span, modalDialog, moduleServer, NS, observe, req, observeEvent, onStop, div, isolate, ],
+  shiny[showModal, span, modalDialog, moduleServer, NS, observe, req, observeEvent, onStop, div, ],
   shinycssloaders[withSpinner, ],
 )
 
@@ -49,7 +49,7 @@ server <- function(id, state) {
     table_name <- "app/data/multimedia.duckdb"
 
     output$map <- renderLeaflet({
-      leaflet() |>
+      leaflet(options = leafletOptions(scrollWheelZoom = FALSE)) |>
         addProviderTiles(providers$CartoDB.DarkMatter) |>
         setView(
           lat = 52.237049,
