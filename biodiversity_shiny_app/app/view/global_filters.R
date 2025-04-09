@@ -40,10 +40,9 @@ ui <- function(id) {
           `live-search` = TRUE,
           `live-search-placeholder` = "Search",
           `none-selected-text` = "Select Fields",
-          `tick-icon` = "",
           `virtual-scroll` = 10,
           `size` = 6,
-          `max-options` = 100
+          `max-options` = 20
         )
       )
     )

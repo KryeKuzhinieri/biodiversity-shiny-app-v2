@@ -51,7 +51,6 @@ server <- function(id, state) {
       if (is.null(dataset)) {
         return(ggplotly(show_no_data_plot(), tooltip = NULL))
       }
-
       p <- ggplot(dataset, aes(x = event_month, y = observation_count, fill = country)) +
         geom_area(position = "stack") +
         facet_wrap(~vernacularName, scales = "free_y") +

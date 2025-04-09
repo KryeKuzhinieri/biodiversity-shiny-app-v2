@@ -11,7 +11,6 @@ theme_tweaks <- list(
   ".navbar-brand { font-weight: $font-weight-bolder !important }",
 
   # Custom theming
-  ".sidebar-right .dropdown-menu .show { max-width: 230px !important}",
   ".notify { color: red !important; }",
   ".modal { z-index: 10000; }"
 )
