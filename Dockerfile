@@ -39,3 +39,10 @@ RUN rm -r *
 
 COPY /biodiversity_shiny_app .
 COPY .env .
+
+# Change ownership of the application directory and renv directory to the shiny user
+RUN chown -R shiny:shiny /srv/shiny-server
+RUN chown -R shiny:shiny /srv/shiny-server/renv
+RUN chown -R shiny:shiny /etc/shiny-server
+
+USER shiny
