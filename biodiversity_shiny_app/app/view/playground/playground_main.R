@@ -1,4 +1,10 @@
 box::use(
+  bslib[
+    card, card_header, layout_sidebar, sidebar, nav_panel,
+    as_fill_carrier, popover, tooltip, toggle_popover,
+  ],
+  bsicons[bs_icon, ],
+  DBI[dbGetQuery, ],
   shiny[
     NS, moduleServer, verbatimTextOutput, tagAppendAttributes, actionButton,
     plotOutput, reactiveVal, textOutput, reactive, renderText,
@@ -6,13 +12,6 @@ box::use(
     downloadHandler,
   ],
   shinychat[chat_ui, chat_append, chat_append_message, ],
-  bslib[
-    card, card_header, layout_sidebar, sidebar, nav_panel,
-    as_fill_carrier, popover, tooltip, toggle_popover,
-  ],
-  bsicons[bs_icon, ],
-  DBI[dbGetQuery, ],
-  DT[DTOutput, renderDT, ],
   # ... means import all functions - needed to allow the ai model to create any
   # type of graph using ggplot2.
   ggplot2[...],
@@ -23,10 +22,10 @@ box::use(
 )
 
 box::use(
-  app / view / playground / prompt_helper[system_prompt, df_to_html, ],
-  app / view / playground / explain_plot[explain_plot, ],
-  app / view / table,
   app / logic / utils[show_no_data_plot, ],
+  app / view / playground / explain_plot[explain_plot, ],
+  app / view / playground / prompt_helper[df_to_html, system_prompt, ],
+  app / view / table,
 )
 
 greeting <- paste(readLines("app/view/playground/greeting.md"), collapse = "\n")

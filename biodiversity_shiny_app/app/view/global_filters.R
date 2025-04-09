@@ -57,14 +57,15 @@ server <- function(id) {
     rv <- reactiveValues(
       data = NULL,
       conn = db_connection(table_name = "occurence.duckdb"),
-      table_name = "app/data/occurence.duckdb"
+      table_name = "occurence"
     )
 
-    all_options_query <- paste(
-      "SELECT DISTINCT vernacularName FROM 'app/data/occurence.duckdb'",
-      "UNION",
-      "SELECT DISTINCT scientificName FROM 'app/data/occurence.duckdb'",
-      sep = " "
+    all_options_query <- sprintf(
+      "SELECT DISTINCT vernacularName FROM '%s'
+      UNION
+      SELECT DISTINCT scientificName FROM '%s'",
+      isolate(rv$table_name),
+      isolate(rv$table_name)
     )
 
     filter_choices <- dbGetQuery(isolate(rv$conn), all_options_query)

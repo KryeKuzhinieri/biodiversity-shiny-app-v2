@@ -33,14 +33,14 @@ convert_data_to_duckdb <- function(csv_file_path, filename) {
       log_info("Data saved in ", tmp_dir)
       duckdb_read_csv(
         conn,
-        name = db_path,
+        name = filename,
         files = tmp_dir,
         delim = "\t"
       )
       log_info("Conversion completed!")
     },
     error = function(e) {
-      log_info(e)
+      print(e)
       log_info("Failed to convert data to duckdb.")
     }
   )
@@ -48,6 +48,6 @@ convert_data_to_duckdb <- function(csv_file_path, filename) {
 }
 
 convert_data_to_duckdb(
-  csv_file_path = "/media/kryekuzhinieri/Projects/Biodiversity Shiny App Version 2/biodiversity-data/occurence.csv",
+  csv_file_path = "/media/kryekuzhinieri/Projects/Biodiversity Shiny App Version 2/extra_files/biodiversity-data/occurence.csv",
   filename = "occurence"
 )
