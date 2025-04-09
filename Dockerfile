@@ -44,5 +44,3 @@ COPY .env .
 RUN chown -R shiny:shiny /srv/shiny-server
 RUN chown -R shiny:shiny /srv/shiny-server/renv
 RUN chown -R shiny:shiny /etc/shiny-server
-
-USER shiny
