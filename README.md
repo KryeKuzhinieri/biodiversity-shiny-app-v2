@@ -33,7 +33,7 @@ This is a Shiny dashboard designed to visualize biodiversity data across various
     * Locate the `.env` file in the project directory.
     * Change the value of `OPENAI_API_KEY` to your OpenAI API key.
     * Update the value of `CSV_DATA_LOCATION` to the absolute or relative path of your `occurence.csv` file.
-    * (Optional) If you wish to utilize Docker build caching, modify `HOST_MACHINE_CACHE_LOCATION` to a local directory on your machine where Docker can store cache volumes.
+    * Modify `HOST_MACHINE_CACHE_LOCATION` to a local directory on your machine where Docker can store cache volumes (You may need to create the dir if you have not installed R or renv before).
 
 2.  **Run Docker Compose:**
     Open your terminal or command prompt, navigate to the project directory, and execute the following command:
