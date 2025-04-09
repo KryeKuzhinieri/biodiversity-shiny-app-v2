@@ -66,8 +66,9 @@ ui <- function(id) {
             tooltip(
               bs_icon("info-circle"),
               "This plot was generated using AI! Try giving the AI model a prompt ",
-              "like `Create a bar chart showing animals by sex` to see what it can do. ",
-              "Feel free to experiment with different queries to explore its full capabilities.",
+              "like `Create a bar chart showing species scientificNames by sex` to see ",
+              "what it can do. Feel free to experiment with different queries to ",
+              "explore its full capabilities.",
               placement = "bottom"
             )
           ),
@@ -94,7 +95,11 @@ ui <- function(id) {
       ),
 
       # Table
-      table$ui(id = ns("table"), card_title = "title", tooltip_info = "test"),
+      table$ui(
+        id = ns("table"),
+        card_title = "Current Data",
+        tooltip_info = "Data filtered and managed by AI."
+      )
     )
   )
 }

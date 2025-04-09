@@ -22,10 +22,14 @@ ui <- function(id) {
     full_screen = TRUE,
     card_header(
       span(
-        "Plot",
+        "Monthly Species Observations by Country",
         tooltip(
           bs_icon("info-circle"),
-          "some tooltip",
+          "This plot displays the number of species observations recorded over ",
+          "time, broken down by month. Each panel represents a different ",
+          "species based on its common name. Observations are grouped and ",
+          "color-coded by region to highlight differences in reporting ",
+          "trends across areas.",
           placement = "bottom"
         )
       )

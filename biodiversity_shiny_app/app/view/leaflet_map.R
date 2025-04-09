@@ -12,10 +12,6 @@ box::use(
 )
 
 
-box::use(
-  app / logic / data_transformations[db_connection, ],
-)
-
 #' @export
 ui <- function(id) {
   ns <- NS(id)
@@ -23,10 +19,13 @@ ui <- function(id) {
     full_screen = TRUE,
     card_header(
       span(
-        "My title",
+        "Species Sightings ",
         tooltip(
           bs_icon("info-circle"),
-          "My tooltip",
+          "This map displays the geographic locations where different species ",
+          "have been observed. Each marker represents a species sighting, ",
+          "color-coded by type: red for animals, blue for fungi, and light ",
+          "green for other organisms.",
           placement = "bottom"
         )
       )

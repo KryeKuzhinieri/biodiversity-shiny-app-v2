@@ -10,8 +10,8 @@ box::use(
   app / view / countries_plot,
   app / view / global_filters,
   app / view / leaflet_map,
-  app / view / table,
   app / view / playground / playground_main,
+  app / view / table,
 )
 
 # helps convert ggplot to dark/light mode.
@@ -37,11 +37,21 @@ ui <- function(id) {
       )
     ),
     nav_panel(
-      "Biodiversity",
+      "Overview",
       global_filters$ui(id = ns("global_filters")),
       leaflet_map$ui(id = ns("leaflet_map")),
       countries_plot$ui(id = ns("countries_plot")),
-      table$ui(id = ns("table"), card_title = "title", tooltip_info = "test"),
+      table$ui(
+        id = ns("table"),
+        card_title = "Species Observation Records",
+        tooltip_info = paste0(
+          "This table lists individual records of species observations. ",
+          "Each row includes details such as the scientific and common names, ",
+          "taxonomic classification, geographic location (continent and region), ",
+          "and the date and coordinates of the observation. The table supports ",
+          "sorting, searching, and pagination for easy navigation through the dataset."
+        )
+      ),
     ),
     playground_main$ui(ns("playground_main")),
     nav_spacer(),

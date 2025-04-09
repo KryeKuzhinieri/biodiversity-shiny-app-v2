@@ -12,7 +12,8 @@ theme_tweaks <- list(
 
   # Custom theming
   ".sidebar-right .dropdown-menu .show { max-width: 230px !important}",
-  ".notify { color: red !important; }"
+  ".notify { color: red !important; }",
+  ".modal { z-index: 10000; }"
 )
 
 #' @export
