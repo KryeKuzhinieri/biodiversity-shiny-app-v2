@@ -49,5 +49,3 @@ COPY .env .
 
 # Give permissions to shiny user for the shiny app directory as well
 RUN chown -R shiny:shiny /srv/shiny-server/
-
-USER shiny
