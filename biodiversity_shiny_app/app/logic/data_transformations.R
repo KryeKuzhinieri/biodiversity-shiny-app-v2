@@ -1,10 +1,10 @@
 box::use(
-  DBI[dbConnect, ],
-  duckdb[duckdb, ],
+  DBI[dbConnect],
+  duckdb[duckdb],
 )
 
 box::use(
-  app / logic / constants[db_data_location, ],
+  app/logic/constants[db_data_location],
 )
 
 #' @export

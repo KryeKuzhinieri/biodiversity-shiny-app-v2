@@ -1,11 +1,15 @@
 box::use(
-  ggplot2[ggsave, ],
+  ellmer[content_image_file],
+  ggplot2[ggsave],
   shiny[
-    showModal, modalDialog, tags, tagAppendAttributes, observeEvent,
     getDefaultReactiveDomain,
+    modalDialog,
+    observeEvent,
+    showModal,
+    tagAppendAttributes,
+    tags
   ],
-  shinychat[chat_ui, chat_append, ],
-  ellmer[content_image_file, ],
+  shinychat[chat_append, chat_ui],
 )
 
 plot_to_img_content <- function(p) {
@@ -49,7 +53,12 @@ explain_plot <- function(chat, p, model, ..., .ctx = NULL, session = getDefaultR
 
   session$onFlushed(function() {
     stream <- chat$chat_async(
-      "Interpret this plot, which is based on the current state of the data (i.e. with filtering applied, if any). Try to make specific observations if you can, but be conservative in drawing firm conclusions and express uncertainty if you can't be confident.",
+      paste0(
+        "Interpret this plot, which is based on the current state of the data ",
+        "(i.e. with filtering applied, if any). Try to make specific observations ",
+        "if you can, but be conservative in drawing firm conclusions and ",
+        "express uncertainty if you can't be confident."
+      ),
       img_content
     )
     chat_append(session$ns(chat_id), stream)

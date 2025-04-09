@@ -1,12 +1,12 @@
 box::use(
-  DBI[dbConnect, dbDisconnect, ],
-  duckdb[duckdb, duckdb_read_csv, ],
-  logger[log_info, ],
-  vroom[vroom, vroom_write, ],
+  DBI[dbConnect, dbDisconnect],
+  duckdb[duckdb, duckdb_read_csv],
+  logger[log_info],
+  vroom[vroom, vroom_write],
 )
 
 box::use(
-  app / logic / constants[db_data_location, ],
+  app / logic / constants[db_data_location],
 )
 
 
@@ -48,6 +48,9 @@ convert_data_to_duckdb <- function(csv_file_path, filename) {
 }
 
 convert_data_to_duckdb(
-  csv_file_path = "/media/kryekuzhinieri/Projects/Biodiversity Shiny App Version 2/extra_files/biodiversity-data/occurence.csv",
+  csv_file_path = paste0(
+    "/media/kryekuzhinieri/Projects/Biodiversity Shiny App Version 2/",
+    "extra_files/biodiversity-data/occurence.csv"
+  ),
   filename = "occurence"
 )

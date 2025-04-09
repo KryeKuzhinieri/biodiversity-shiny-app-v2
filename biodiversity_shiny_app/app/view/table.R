@@ -1,10 +1,10 @@
 box::use(
-  bsicons[bs_icon, ],
-  bslib[as_fill_carrier, card, card_header, popover, tooltip, ],
-  DT[DTOutput, renderDT, ],
-  shiny[downloadButton, downloadHandler, moduleServer, NS, span, ],
-  shinycssloaders[withSpinner, ],
-  utils[write.csv2, ],
+  bsicons[bs_icon],
+  bslib[as_fill_carrier, card, card_header, popover, tooltip],
+  DT[DTOutput, renderDT],
+  shiny[downloadButton, downloadHandler, moduleServer, NS, span],
+  shinycssloaders[withSpinner],
+  utils[write.csv2],
 )
 
 

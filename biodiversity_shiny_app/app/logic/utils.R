@@ -1,6 +1,9 @@
 box::use(
   ggplot2[
-    ggplot, element_blank, theme, annotate,
+    annotate,
+    element_blank,
+    ggplot,
+    theme
   ],
 )
 

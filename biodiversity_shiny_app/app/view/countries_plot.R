@@ -1,14 +1,14 @@
 box::use(
-  bsicons[bs_icon, ],
-  bslib[as_fill_carrier, card, card_header, tooltip, ],
-  ggplot2[aes, facet_wrap, geom_area, ggplot, labs, ],
-  plotly[ggplotly, plotlyOutput, renderPlotly, ],
-  shiny[moduleServer, NS, span, ],
-  shinycssloaders[withSpinner, ],
+  bsicons[bs_icon],
+  bslib[as_fill_carrier, card, card_header, tooltip],
+  ggplot2[aes, facet_wrap, geom_area, ggplot, labs],
+  plotly[ggplotly, plotlyOutput, renderPlotly],
+  shiny[moduleServer, NS, span],
+  shinycssloaders[withSpinner],
 )
 
 box::use(
-  app / logic / utils[show_no_data_plot, ],
+  app/logic/utils[show_no_data_plot],
 )
 
 

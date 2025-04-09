@@ -1,14 +1,23 @@
 box::use(
   bsicons[bs_icon],
-  bslib[as_fill_carrier, card, card_header, tooltip, bs_get_variables, ],
+  bslib[as_fill_carrier, bs_get_variables, card, card_header, tooltip],
   leaflet[
-    leaflet, leafletOutput, renderLeaflet, addAwesomeMarkers,
+    addAwesomeMarkers,
+    addProviderTiles,
     awesomeIcons,
-    setView, leafletProxy, clearShapes, clearMarkers, clearMarkerClusters,
-    addProviderTiles, providers, leafletOptions
+    clearMarkerClusters,
+    clearMarkers,
+    clearShapes,
+    leaflet,
+    leafletOptions,
+    leafletOutput,
+    leafletProxy,
+    providers,
+    renderLeaflet,
+    setView
   ],
-  shiny[showModal, span, modalDialog, moduleServer, NS, observe, req, observeEvent, div, ],
-  shinycssloaders[withSpinner, ],
+  shiny[div, modalDialog, moduleServer, NS, observe, observeEvent, req, span, showModal],
+  shinycssloaders[withSpinner],
 )
 
 

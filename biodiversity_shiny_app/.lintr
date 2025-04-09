@@ -1,5 +1,8 @@
 linters:
   linters_with_defaults(
-    defaults = box.linters::rhino_default_linters,
-    line_length_linter = line_length_linter(100)
+    defaults = box.linters::box_default_linters,
+    line_length_linter = line_length_linter(100),
+    box_func_import_count_linter = box.linters::box_func_import_count_linter(max = 20L),
+    object_name_linter(styles = c("SNAKE_CASE", "snake_case", "symbols"))
   )
+encoding: "UTF-8"

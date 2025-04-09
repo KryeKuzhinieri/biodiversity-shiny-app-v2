@@ -1,30 +1,48 @@
 box::use(
+  bsicons[bs_icon],
   bslib[
-    card, card_header, layout_sidebar, sidebar, nav_panel,
-    as_fill_carrier, popover, tooltip, toggle_popover,
+    as_fill_carrier,
+    card,
+    card_header,
+    layout_sidebar,
+    nav_panel,
+    popover,
+    sidebar,
+    toggle_popover,
+    tooltip
   ],
-  bsicons[bs_icon, ],
-  DBI[dbGetQuery, ],
+  DBI[dbGetQuery],
+  ellmer[chat_openai, tool, type_string],
+  ggplot2[...], # ... means import all functions - needed to allow the ai model to create any
+  jsonlite[toJSON],
+  promises[`%...>%`],
   shiny[
-    NS, moduleServer, verbatimTextOutput, tagAppendAttributes, actionButton,
-    plotOutput, reactiveVal, textOutput, reactive, renderText,
-    renderPlot, observeEvent, tags, isolate, observe, downloadButton,
+    actionButton,
+    downloadButton,
     downloadHandler,
+    isolate,
+    moduleServer,
+    NS,
+    observe,
+    observeEvent,
+    plotOutput,
+    reactive,
+    reactiveVal,
+    renderPlot,
+    renderText,
+    tagAppendAttributes,
+    tags,
+    textOutput,
+    verbatimTextOutput
   ],
-  shinychat[chat_ui, chat_append, chat_append_message, ],
-  # ... means import all functions - needed to allow the ai model to create any
-  # type of graph using ggplot2.
-  ggplot2[...],
-  jsonlite[toJSON, ],
-  ellmer[chat_openai, tool, type_string, ],
-  promises[`%...>%`, ],
-  shinycssloaders[withSpinner, ],
+  shinychat[chat_append, chat_append_message, chat_ui],
+  shinycssloaders[withSpinner],
 )
 
 box::use(
-  app / logic / utils[show_no_data_plot, ],
-  app / view / playground / explain_plot[explain_plot, ],
-  app / view / playground / prompt_helper[df_to_html, system_prompt, ],
+  app / logic / utils[show_no_data_plot],
+  app / view / playground / explain_plot[explain_plot],
+  app / view / playground / prompt_helper[df_to_html, system_prompt],
   app / view / table,
 )
 
@@ -241,9 +259,17 @@ server <- function(id, state) {
       # the chat model, and must not be shown to the end user.
       chat$register_tool(tool(
         update_dashboard,
-        "Modifies the data presented in the data dashboard, based on the given SQL query, and also updates the title.",
+        paste0(
+          "Modifies the data presented in the data dashboard, based on the given ",
+          "SQL query, and also updates the title."
+        ),
         query = type_string("A DuckDB SQL query; must be a SELECT statement."),
-        title = type_string("A title to display at the top of the data dashboard, summarizing the intent of the SQL query.")
+        title = type_string(
+          paste0(
+            "A title to display at the top of the data dashboard, ",
+            "summarizing the intent of the SQL query."
+          )
+        )
       ))
       chat$register_tool(tool(
         query,
@@ -254,7 +280,12 @@ server <- function(id, state) {
         tool(
           plot_data,
           "Modifies the plot present in the dashboard, based on the given plot code.",
-          code = type_string("An R code command as string to be evaluated with eval(parse(text = 'code here')).")
+          code = type_string(
+            paste0(
+              "An R code command as string to be evaluated ",
+              "with eval(parse(text = 'code here'))."
+            )
+          )
         )
       )
     })
@@ -269,7 +300,7 @@ server <- function(id, state) {
     observeEvent(input$chat_user_input, {
       # Add user message to the chat history
       chat_append(ns("chat"), chat$chat_async(input$chat_user_input)) %...>% {
-        # print(chat())
+        # print(chat())  # nolint
       }
     })
 

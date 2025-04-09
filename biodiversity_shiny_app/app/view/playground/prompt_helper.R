@@ -1,5 +1,5 @@
 box::use(
-  xtable[xtable, ],
+  xtable[xtable],
 )
 
 #' @export

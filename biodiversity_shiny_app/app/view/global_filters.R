@@ -1,14 +1,14 @@
 box::use(
-  bsicons[bs_icon, ],
-  bslib[accordion, accordion_panel, tooltip, ],
-  DBI[dbDisconnect, dbGetQuery, ],
-  shiny[reactiveValues, observeEvent, moduleServer, NS, span, onStop, isolate, ],
-  shinyWidgets[pickerInput, updatePickerInput, ],
+  bsicons[bs_icon],
+  bslib[accordion, accordion_panel, tooltip],
+  DBI[dbDisconnect, dbGetQuery],
+  shiny[isolate, moduleServer, NS, observeEvent, onStop, reactiveValues, span],
+  shinyWidgets[pickerInput, updatePickerInput],
 )
 
 box::use(
-  app / logic / constants[main_query, unique_options_query, summary_query, ],
-  app / logic / data_transformations[db_connection, ],
+  app/logic/constants[main_query, summary_query, unique_options_query],
+  app/logic/data_transformations[db_connection],
 )
 
 

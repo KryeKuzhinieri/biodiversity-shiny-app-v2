@@ -1,6 +1,6 @@
 box::use(
-  bslib[bs_add_rules, bs_theme, font_face, ],
-  shiny[addResourcePath, ],
+  bslib[bs_add_rules, bs_theme, font_face],
+  shiny[addResourcePath],
 )
 
 
