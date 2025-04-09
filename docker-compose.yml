@@ -13,8 +13,6 @@ services:
       - '${HOST_PORT_NUMBER}:3839'
     volumes:
       - 'shiny_logs:/var/log/shiny-server'
-      - '${CSV_DATA_LOCATION}:/data'
-      - '${HOST_MACHINE_CACHE_LOCATION}:/renv/cache'
     command:
       # I have added the rscript here so that the user does not need to 
       # worry about creating the duckdb dataset. Obviously, creating this as 
