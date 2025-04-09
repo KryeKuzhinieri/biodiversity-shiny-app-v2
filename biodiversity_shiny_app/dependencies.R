@@ -12,6 +12,8 @@ library(leaflet)
 library(shinycssloaders)
 library(shinyWidgets)
 library(DT)
+library(ggplot2)
+library(plotly)
 
 
 library(treesitter)

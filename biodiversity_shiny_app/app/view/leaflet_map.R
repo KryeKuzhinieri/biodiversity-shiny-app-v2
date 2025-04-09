@@ -77,6 +77,7 @@ server <- function(id, state) {
         print(filtered_data)
         print("-----")
         print(my_data)
+
         showModal(
           modalDialog(
             title = filtered_data$cro.name,

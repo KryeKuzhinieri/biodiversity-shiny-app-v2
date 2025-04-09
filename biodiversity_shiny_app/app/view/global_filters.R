@@ -86,6 +86,27 @@ server <- function(id) {
         query <- sprintf("SELECT * FROM '%s' WHERE vernacularName IN (%s)
         OR scientificName IN (%s)", table_name, placeholders, placeholders)
         rv$data <- dbGetQuery(conn, query, params = c(input$species_names, input$species_names))
+
+        summary_query <- sprintf(
+          "SELECT
+            country,
+            scientificName,
+            vernacularName,
+            DATE_TRUNC('month', CAST(eventDate AS DATE)) AS event_month,
+            COUNT(*) AS observation_count
+          FROM '%s'
+          WHERE vernacularName IN (%s) OR scientificName IN (%s)
+          GROUP BY country, event_month, scientificName, vernacularName
+          ORDER BY event_month;",
+          table_name,
+          placeholders,
+          placeholders
+        )
+        rv$summary_data <- dbGetQuery(
+          conn,
+          summary_query,
+          params = c(input$species_names, input$species_names)
+        )
       },
       ignoreInit = TRUE,
       ignoreNULL = TRUE

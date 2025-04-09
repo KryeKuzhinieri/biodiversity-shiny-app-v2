@@ -7,6 +7,7 @@ box::use(
 
 box::use(
   app / logic / theming[set_theme, ],
+  app / view / countries_plot,
   app / view / global_filters,
   app / view / leaflet_map,
   app / view / table,
@@ -38,6 +39,7 @@ ui <- function(id) {
       "Biodiversity",
       global_filters$ui(id = ns("global_filters")),
       leaflet_map$ui(id = ns("leaflet_map")),
+      countries_plot$ui(id = ns("countries_plot")),
       table$ui(id = ns("table")),
     ),
     nav_spacer(),
@@ -50,6 +52,7 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     state <- global_filters$server(id = "global_filters")
     leaflet_map$server(id = "leaflet_map", state = state)
+    countries_plot$server(id = "countries_plot", state = state)
     table$server(id = "table", state = state)
     observeEvent(input$theme_switch,
       {
