@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  shiny:
+    container_name: '${COMPOSE_PROJECT_NAME}'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    user: 'shiny'
+    env_file: .env
+    ports:
+      - '${HOST_PORT_NUMBER}:3839'
+    volumes:
+      - 'shiny_logs:/var/log/shiny-server'
+      - '${SERVER_DATA_LOCATION}:/data'
+      - '${HOST_MACHINE_CACHE_LOCATION}:/renv/cache'
+    command:
+      # TODO: magick issue needs to be fixed in the future.
+      bash -c "R -e 'renv::restore();' && R -e 'renv::install(\"magick\", rebuild = T)' && /usr/bin/shiny-server"
+
+volumes:
+  shiny_logs:
