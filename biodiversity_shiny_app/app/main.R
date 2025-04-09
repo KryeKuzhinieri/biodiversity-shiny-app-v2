@@ -1,6 +1,6 @@
 box::use(
   bslib[input_dark_mode, nav_item, nav_panel, nav_spacer, page_navbar, ],
-  shiny[moduleServer, NS, observeEvent, tags, isolate, onStop, ],
+  shiny[moduleServer, NS, observeEvent, tags, ],
   shinyjs[runjs, useShinyjs],
   thematic[thematic_shiny, ],
 )
@@ -9,6 +9,7 @@ box::use(
   app / logic / theming[set_theme, ],
   app / view / global_filters,
   app / view / leaflet_map,
+  app / view / table,
 )
 
 # helps convert ggplot to dark/light mode.
@@ -20,7 +21,7 @@ ui <- function(id) {
   page_navbar(
     title = "Biodiversity Application",
     sidebar = NULL,
-    theme = set_theme(mode = "light"),
+    theme = set_theme(mode = "dark"),
     fillable = FALSE,
     inverse = FALSE,
     header = tags$head(
@@ -37,9 +38,10 @@ ui <- function(id) {
       "Biodiversity",
       global_filters$ui(id = ns("global_filters")),
       leaflet_map$ui(id = ns("leaflet_map")),
+      table$ui(id = ns("table")),
     ),
     nav_spacer(),
-    nav_item(input_dark_mode(id = ns("theme_switch"), mode = "light"))
+    nav_item(input_dark_mode(id = ns("theme_switch"), mode = "dark"))
   )
 }
 
@@ -48,6 +50,7 @@ server <- function(id) {
   moduleServer(id, function(input, output, session) {
     state <- global_filters$server(id = "global_filters")
     leaflet_map$server(id = "leaflet_map", state = state)
+    table$server(id = "table", state = state)
     observeEvent(input$theme_switch,
       {
         # show the logo to hide some design issues when
