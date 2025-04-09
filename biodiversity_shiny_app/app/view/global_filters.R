@@ -8,8 +8,8 @@ box::use(
 )
 
 box::use(
+  app / data / data_transformations[db_connection],
   app / logic / constants[main_query, summary_query, unique_options_query],
-  app / logic / data_transformations[db_connection],
 )
 
 
