@@ -1,4 +1,4 @@
-# Base image https://hub.docker.com/u/rocker/shiny:4.4
+# Base image https://hub.docker.com/u/rocker/
 FROM rocker/shiny:4.4
 
 # Install system requirements for R as needed
@@ -26,11 +26,16 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+
 RUN R -e "install.packages('dotenv')"
 
 # Custom shiny-server.conf file. Configuration details here:
 # https://docs.posit.co/shiny-server
 COPY shiny-server.conf /etc/shiny-server
+
+# create container folder for caching packages
+RUN mkdir -p renv/cache
+ENV RENV_PATHS_CACHE=/renv/cache
 
 WORKDIR /srv/shiny-server
 
@@ -40,7 +45,5 @@ RUN rm -r *
 COPY /biodiversity_shiny_app .
 COPY .env .
 
-# Change ownership of the application directory and renv directory to the shiny user
-RUN chown -R shiny:shiny /srv/shiny-server
-RUN chown -R shiny:shiny /srv/shiny-server/renv
-RUN chown -R shiny:shiny /etc/shiny-server
+# Give permissions to shiny user for shiny-server
+RUN chown -R shiny:shiny /srv/shiny-server/
