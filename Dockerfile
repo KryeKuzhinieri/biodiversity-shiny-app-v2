@@ -30,7 +30,7 @@ WORKDIR /srv/shiny-server
 # Removes all demo files from shiny server.
 RUN rm -r *
 
-COPY /Invivogen .
+COPY /biodiversity_shiny_app .
 
 # Give permissions to shiny user for shiny-server and to static/graphs to all
 # users.

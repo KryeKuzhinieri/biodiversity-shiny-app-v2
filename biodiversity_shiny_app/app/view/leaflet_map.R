@@ -60,11 +60,12 @@ server <- function(id, state) {
     observeEvent(input$map_marker_click,
       {
         print(input$map_marker_click)
-        cols <- c(
-          "id", "scientificName", "taxonRank", "kingdom",
-          "continent", "country", "countryCode", "eventDate"
-        )
-        filtered_data <- state$data[input$map_marker_click$id, cols]
+        # cols <- c(
+        #   "id", "scientificName", "taxonRank", "kingdom",
+        #   "continent", "country", "countryCode", "eventDate"
+        # )
+        # filtered_data <- state$data[input$map_marker_click$id, cols]
+        filtered_data <- state$data[input$map_marker_click$id, ]
         query <- sprintf("SELECT * FROM '%s' WHERE CoreId = '%s'", table_name, filtered_data[1, "id"])
         print(query)
         my_data <- dbGetQuery(conn, query)
