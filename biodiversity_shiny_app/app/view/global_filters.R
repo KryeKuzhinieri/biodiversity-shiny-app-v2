@@ -2,7 +2,7 @@ box::use(
   bsicons[bs_icon, ],
   bslib[accordion, accordion_panel, tooltip, ],
   DBI[dbDisconnect, dbGetQuery, ],
-  shiny[reactiveValues, observeEvent, moduleServer, NS, span, onStop, ],
+  shiny[reactiveValues, observeEvent, moduleServer, NS, span, onStop, isolate, ],
   shinyWidgets[pickerInput, updatePickerInput, ],
 )
 
@@ -58,9 +58,9 @@ server <- function(id) {
 
     rv <- reactiveValues(
       data = NULL,
+      conn = db_connection(table_name = "occurence.duckdb")
     )
 
-    conn <- db_connection(table_name = "occurence.duckdb")
     all_options_query <- paste(
       "SELECT DISTINCT vernacularName FROM 'app/data/occurence.duckdb'",
       "UNION",
@@ -68,7 +68,7 @@ server <- function(id) {
       sep = " "
     )
 
-    filter_choices <- dbGetQuery(conn, all_options_query)
+    filter_choices <- dbGetQuery(isolate(rv$conn), all_options_query)
 
     updatePickerInput(
       inputId = "species_names",
@@ -83,9 +83,19 @@ server <- function(id) {
       input$species_names,
       {
         placeholders <- paste(rep("?", length(input$species_names)), collapse = ", ")
-        query <- sprintf("SELECT * FROM '%s' WHERE vernacularName IN (%s)
-        OR scientificName IN (%s)", table_name, placeholders, placeholders)
-        rv$data <- dbGetQuery(conn, query, params = c(input$species_names, input$species_names))
+        query <- sprintf(
+          "
+          SELECT
+            id, scientificName, vernacularName, taxonRank, kingdom,
+            continent, country, countryCode, eventDate,
+            latitudeDecimal, longitudeDecimal
+          FROM '%s'
+          WHERE vernacularName IN (%s) OR scientificName IN (%s)",
+          table_name,
+          placeholders,
+          placeholders
+        )
+        rv$data <- dbGetQuery(rv$conn, query, params = c(input$species_names, input$species_names))
 
         summary_query <- sprintf(
           "SELECT
@@ -103,7 +113,7 @@ server <- function(id) {
           placeholders
         )
         rv$summary_data <- dbGetQuery(
-          conn,
+          rv$conn,
           summary_query,
           params = c(input$species_names, input$species_names)
         )
@@ -114,7 +124,7 @@ server <- function(id) {
 
     onStop(function() {
       cat("Doing application cleanup!")
-      dbDisconnect(conn)
+      dbDisconnect(isolate(rv$conn))
     })
 
     return(rv)

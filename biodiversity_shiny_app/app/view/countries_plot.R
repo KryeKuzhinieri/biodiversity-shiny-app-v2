@@ -46,7 +46,6 @@ server <- function(id, state) {
 
     output$plot <- renderPlotly({
       dataset <- state$summary_data
-      print(dataset)
 
       if (is.null(dataset)) {
         return(ggplotly(show_no_data_plot(), tooltip = NULL))

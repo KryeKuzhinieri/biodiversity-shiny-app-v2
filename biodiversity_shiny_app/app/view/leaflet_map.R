@@ -1,6 +1,5 @@
 box::use(
   bsicons[bs_icon],
-  DBI[dbDisconnect, dbGetQuery, ],
   bslib[as_fill_carrier, card, card_header, tooltip, bs_get_variables, ],
   leaflet[
     leaflet, leafletOutput, renderLeaflet, addAwesomeMarkers,
@@ -8,7 +7,7 @@ box::use(
     setView, leafletProxy, clearShapes, clearMarkers, clearMarkerClusters,
     addProviderTiles, providers, leafletOptions
   ],
-  shiny[showModal, span, modalDialog, moduleServer, NS, observe, req, observeEvent, onStop, div, ],
+  shiny[showModal, span, modalDialog, moduleServer, NS, observe, req, observeEvent, div, ],
   shinycssloaders[withSpinner, ],
 )
 
@@ -45,8 +44,6 @@ ui <- function(id) {
 server <- function(id, state) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    conn <- db_connection(table_name = "multimedia.duckdb")
-    table_name <- "app/data/multimedia.duckdb"
 
     output$map <- renderLeaflet({
       leaflet(options = leafletOptions(scrollWheelZoom = FALSE)) |>
@@ -60,27 +57,10 @@ server <- function(id, state) {
 
     observeEvent(input$map_marker_click,
       {
-        print(input$map_marker_click)
-        cols <- c(
-          "id", "scientificName", "taxonRank", "kingdom",
-          "continent", "country", "countryCode", "eventDate"
-        )
-        filtered_data <- state$data[input$map_marker_click$id, cols]
-        # filtered_data <- state$data[input$map_marker_click$id, ]
-        query <- sprintf(
-          "SELECT * FROM '%s' WHERE CoreId = '%s'",
-          table_name,
-          filtered_data[1, "id"]
-        )
-        print(query)
-        my_data <- dbGetQuery(conn, query)
-        print(filtered_data)
-        print("-----")
-        print(my_data)
-
+        filtered_data <- state$data[input$map_marker_click$id, ]
         showModal(
           modalDialog(
-            title = filtered_data$cro.name,
+            title = filtered_data$scientificName,
             size = "l",
             easyClose = TRUE,
             lapply(names(filtered_data), function(col_name) {
@@ -134,11 +114,6 @@ server <- function(id, state) {
           ),
           layerId = seq_len(nrow(state$data))
         )
-    })
-
-    onStop(function() {
-      cat("Doing application cleanup!")
-      dbDisconnect(conn)
     })
   })
 }
