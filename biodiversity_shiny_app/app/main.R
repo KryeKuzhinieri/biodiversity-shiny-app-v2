@@ -41,7 +41,7 @@ ui <- function(id) {
       global_filters$ui(id = ns("global_filters")),
       leaflet_map$ui(id = ns("leaflet_map")),
       countries_plot$ui(id = ns("countries_plot")),
-      table$ui(id = ns("table")),
+      table$ui(id = ns("table"), card_title = "title", tooltip_info = "test"),
     ),
     playground_main$ui(ns("playground_main")),
     nav_spacer(),

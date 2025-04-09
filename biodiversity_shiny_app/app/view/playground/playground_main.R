@@ -20,12 +20,12 @@ box::use(
   ellmer[chat_openai, tool, type_string, ],
   promises[`%...>%`, ],
   shinycssloaders[withSpinner, ],
-  utils[write.csv2, ],
 )
 
 box::use(
   app / view / playground / prompt_helper[system_prompt, df_to_html, ],
   app / view / playground / explain_plot[explain_plot, ],
+  app / view / table,
   app / logic / utils[show_no_data_plot, ],
 )
 
@@ -44,7 +44,7 @@ ui <- function(id) {
       fill = TRUE,
       sidebar = sidebar(
         width = 450,
-        chat_ui(ns("chat"), fill = FALSE, height = "800px")
+        chat_ui(ns("chat"), fill = FALSE, height = "750px")
       ),
       # Headers
       tagAppendAttributes(
@@ -95,35 +95,7 @@ ui <- function(id) {
       ),
 
       # Table
-      card(
-        full_screen = TRUE,
-        max_height = 350,
-        card_header(
-          class = "d-flex justify-content-between align-items-center",
-          tags$span(
-            "Data",
-            tooltip(
-              bs_icon("info-circle"),
-              "The dataset below represents the full data used. To filter it using ",
-              "the AI model, try queries like `Show only Bovine and Porcine species.`",
-              "Feel free to experiment with different queries to explore its full capabilities!",
-              placement = "bottom"
-            )
-          ),
-          popover(
-            id = ns("data-popover"),
-            trigger = bs_icon("gear"),
-            title = "Options",
-            downloadButton(ns("download_data"), label = "Download Data"),
-          ),
-        ),
-        as_fill_carrier(
-          withSpinner(
-            DTOutput(ns("table")),
-            color = "#25443B"
-          )
-        )
-      ),
+      table$ui(id = ns("table"), card_title = "title", tooltip_info = "test"),
     )
   )
 }
@@ -132,7 +104,6 @@ ui <- function(id) {
 server <- function(id, state) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
     default_query <- sprintf("SELECT * FROM '%s';", isolate(state$table_name))
     current_title <- reactiveVal("All data")
     current_query <- reactiveVal(default_query)
@@ -166,8 +137,6 @@ server <- function(id, state) {
     output$show_query <- renderText({
       current_query()
     })
-
-    output$table <- renderDT(db_data(), fillContainer = TRUE)
 
     output$plot <- renderPlot(current_plot())
 
@@ -300,21 +269,13 @@ server <- function(id, state) {
       }
     })
 
+    table$server(id = "table", data = db_data())
     output$download_graph <- downloadHandler(
       filename = function() {
         "plot.png"
       },
       content = function(file) {
         ggsave(file, current_plot(), bg = "white", width = 10, height = 6)
-      }
-    )
-
-    output$download_data <- downloadHandler(
-      filename = function() {
-        "data.csv"
-      },
-      content = function(file) {
-        write.csv2(db_data(), file, row.names = FALSE)
       }
     )
   })

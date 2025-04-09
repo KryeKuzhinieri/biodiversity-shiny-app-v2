@@ -51,8 +51,3 @@ convert_data_to_duckdb(
   csv_file_path = "/media/kryekuzhinieri/Projects/Biodiversity Shiny App Version 2/biodiversity-data/occurence.csv",
   filename = "occurence"
 )
-
-convert_data_to_duckdb(
-  csv_file_path = "/media/kryekuzhinieri/Projects/Biodiversity Shiny App Version 2/biodiversity-data/multimedia.csv",
-  filename = "multimedia"
-)
