@@ -13,9 +13,10 @@ box::use(
   ],
   DBI[dbGetQuery],
   ellmer[chat_openai, tool, type_string],
-  ggplot2[...], # ... means import all functions - needed to allow the ai model to create any
+  ggplot2[...], # import all functions - needed to allow the ai model to create any plot
   jsonlite[toJSON],
-  promises[`%...>%`, catch, then, ],
+  logger[log_info],
+  promises[`%...>%`, catch, then],
   shiny[
     actionButton,
     downloadButton,
@@ -30,22 +31,21 @@ box::use(
     reactiveVal,
     renderPlot,
     renderText,
+    showNotification,
     tagAppendAttributes,
     tags,
     textOutput,
-    verbatimTextOutput,
-    showNotification
+    verbatimTextOutput
   ],
   shinychat[chat_append, chat_append_message, chat_ui],
-  logger[log_info],
   shinycssloaders[withSpinner],
 )
 
 box::use(
-  app / logic / utils[show_no_data_plot],
-  app / view / playground / explain_plot[explain_plot],
-  app / view / playground / prompt_helper[df_to_html, system_prompt],
-  app / view / table,
+  app/logic/utils[show_no_data_plot],
+  app/view/playground/explain_plot[explain_plot],
+  app/view/playground/prompt_helper[df_to_html, system_prompt],
+  app/view/table,
 )
 
 greeting <- paste(readLines(box::file("greeting.md")), collapse = "\n")

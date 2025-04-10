@@ -2,10 +2,10 @@ box::use(
   bsicons[bs_icon],
   bslib[as_fill_carrier, card, card_header, tooltip],
   ggplot2[aes, facet_wrap, geom_area, ggplot, labs],
+  logger[log_info],
   plotly[ggplotly, plotlyOutput, renderPlotly],
   shiny[moduleServer, NS, span],
   shinycssloaders[withSpinner],
-  logger[log_info],
 )
 
 box::use(
