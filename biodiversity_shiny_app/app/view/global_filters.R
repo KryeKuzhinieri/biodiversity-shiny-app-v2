@@ -2,14 +2,14 @@ box::use(
   bsicons[bs_icon],
   bslib[accordion, accordion_panel, tooltip],
   DBI[dbDisconnect, dbGetQuery],
+  logger[log_info],
   shiny[isolate, moduleServer, NS, observeEvent, onStop, reactiveValues, span],
   shinyWidgets[pickerInput, updatePickerInput],
-  logger[log_info],
 )
 
 box::use(
-  app / data / data_transformations[db_connection],
-  app / logic / constants[main_query, summary_query, unique_options_query],
+  app/data/data_transformations[db_connection],
+  app/logic/constants[main_query, summary_query, unique_options_query],
 )
 
 
@@ -75,9 +75,9 @@ server <- function(id) {
       choices = filter_choices,
       # selected = NULL
       selected = c(
-        "Wild Onion",  # plantae
-        "Blackstart",  # animal
-        "Exidia truncata",  # fungi
+        "Wild Onion", # plantae
+        "Blackstart", # animal
+        "Exidia truncata", # fungi
         "Borago officinalis"
       )
     )

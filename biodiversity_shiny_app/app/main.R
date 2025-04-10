@@ -1,18 +1,18 @@
 box::use(
   bslib[input_dark_mode, nav_item, nav_panel, nav_spacer, page_navbar],
+  logger[log_info],
   shiny[moduleServer, NS, observeEvent, tags],
   shinyjs[runjs, useShinyjs],
   thematic[thematic_shiny],
-  logger[log_info],
 )
 
 box::use(
-  app / logic / theming[set_theme],
-  app / view / countries_plot,
-  app / view / global_filters,
-  app / view / leaflet_map,
-  app / view / playground / playground_main,
-  app / view / table,
+  app/logic/theming[set_theme],
+  app/view/countries_plot,
+  app/view/global_filters,
+  app/view/leaflet_map,
+  app/view/playground/playground_main,
+  app/view/table,
 )
 
 # helps convert ggplot to dark/light mode.

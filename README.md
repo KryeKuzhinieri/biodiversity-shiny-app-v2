@@ -1,6 +1,7 @@
 # Biodiversity Shiny App
 
-[![Link to live dashboard](https://img.shields.io/badge/Live%20Dashboard-link_placeholder-brightgreen)](link_placeholder)
+## Live demo on privately hosted GCP
+http://34.46.176.168:3839
 
 ![Demo GIF](gif_placeholder)
 
@@ -24,6 +25,7 @@ This is a Shiny dashboard designed to visualize biodiversity data across various
 7.  **Light and Dark Themes:** Offers both light and dark visual themes for user preference.
 8.  **Automatic Data Conversion:** Automatically converts the input CSV data to a DuckDB database upon startup, eliminating manual data processing steps for the user.
 9.  **Caching Mechanism:** Implements caching strategies to optimize Docker build times.
+10. **Tests:** Simple tests for the table module have been added.
 
 **How to Run:**
 
@@ -51,6 +53,8 @@ This is a Shiny dashboard designed to visualize biodiversity data across various
     http://localhost:3839/
     ```
 
+You can run tests using the following command `docker exec biodiversity_app bash -c 'R -e "rhino::auto_test_r()"'`. 
+
 **Reference to Previous Work:**
 
-Three to four years ago, I developed another dashboard for a similar biodiversity visualization task. You can find the code for that older project here: [https://github.com/KryeKuzhinieri/biodiversity-shiny-app](https://github.com/KryeKuzhinieri/biodiversity-shiny-app)
+Three to four years ago, I developed another dashboard for the same biodiversity visualization task. You can find the code for that older project here: [https://github.com/KryeKuzhinieri/biodiversity-shiny-app](https://github.com/KryeKuzhinieri/biodiversity-shiny-app)

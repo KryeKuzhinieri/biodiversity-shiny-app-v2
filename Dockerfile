@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     libproj-dev \
     libsqlite3-dev \
     cmake \
+    pandoc \
     build-essential \
     gfortran \
     r-base-dev \
