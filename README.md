@@ -3,7 +3,9 @@
 ## Live demo on privately hosted GCP
 http://34.46.176.168:3839
 
-![Demo GIF](gif_placeholder)
+## Video demo
+
+Video can be found here: https://drive.google.com/file/d/180QXXWb6YgSeiwXBDSp_rmUleNkC8X1A/view?usp=sharing
 
 **Description:**
 
