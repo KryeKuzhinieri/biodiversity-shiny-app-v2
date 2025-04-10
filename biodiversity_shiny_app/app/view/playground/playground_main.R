@@ -13,7 +13,7 @@ box::use(
   ],
   DBI[dbGetQuery],
   ellmer[chat_openai, tool, type_string],
-  ggplot2[...], # ... means import all functions - needed to allow the ai model to create any
+  ggplot2[...], # import all functions - needed to allow the ai model to create any plot
   jsonlite[toJSON],
   logger[log_info],
   promises[`%...>%`, catch, then],
