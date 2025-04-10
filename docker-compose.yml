@@ -19,7 +19,7 @@ services:
       # I have added the rscript here so that the user does not need to 
       # worry about creating the duckdb dataset. Obviously, creating this as 
       # separate step is needed to achieve better performance.
-      bash -c "R -e 'renv::restore();' && Rscript app/data/convert_data_to_duckdb.R && /usr/bin/shiny-server"
+      bash -c "R -e 'renv::restore();' && R -e 'renv::install(\"magick\", rebuild = T)' && Rscript app/data/convert_data_to_duckdb.R && /usr/bin/shiny-server"
 
 volumes:
   shiny_logs:
