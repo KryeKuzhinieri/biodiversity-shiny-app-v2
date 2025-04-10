@@ -33,10 +33,6 @@ RUN R -e "install.packages('dotenv')"
 # https://docs.posit.co/shiny-server
 COPY shiny-server.conf /etc/shiny-server
 
-# create container folder for caching packages
-RUN mkdir -p renv/cache
-ENV RENV_PATHS_CACHE=/renv/cache
-
 WORKDIR /srv/shiny-server
 
 # Removes all demo files from shiny server.
