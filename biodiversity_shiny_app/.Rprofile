@@ -3,6 +3,7 @@ if (file.exists(".env")) {
   load_dot_env(".env")
 }
 
+Sys.setenv(RENV_PATHS_PREFIX_AUTO=FALSE)
 
 if (file.exists("renv")) {
   source("renv/activate.R")
