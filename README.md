@@ -1,7 +1,8 @@
 # Biodiversity Shiny App
 
 ## Live demo on privately hosted GCP
-http://34.42.156.174:3839
+http://188.245.146.27:3839/
+
 ## Video demo
 
 Video can be found here: https://drive.google.com/file/d/180QXXWb6YgSeiwXBDSp_rmUleNkC8X1A/view?usp=sharing
