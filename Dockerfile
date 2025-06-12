@@ -38,6 +38,7 @@ COPY shiny-server.conf /etc/shiny-server
 RUN mkdir -p renv/cache
 ENV RENV_PATHS_CACHE=/renv/cache
 
+
 WORKDIR /srv/shiny-server
 
 # Removes all demo files from shiny server.
